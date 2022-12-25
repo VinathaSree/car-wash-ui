@@ -1,0 +1,128 @@
+<!doctype html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content= "width=device-width, user-scalable=no">
+    <title>Login Page</title>    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    body{
+      background-attachment: fixed;
+    }
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+
+<link href="css/signin.css" rel="stylesheet">
+</head>
+<body class="text-center">
+
+  <main class="form-signin">
+    <form action="" method="POST">
+    <svg width="80" height="80" viewBox="0 0 48 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12.6761 24.1784V12.0892H25C25 5.45775 19.4366 0 12.6761 0C5.91549 0 0.352113 5.45775 0.352113 12.0892C0.352113 18.7207 5.91549 24.1784 12.6761 24.1784ZM35.2113 50V37.9108H47.5352C47.5352 31.2793 41.9718 25.8216 35.2113 25.8216C28.4507 25.8216 22.8873 31.2793 22.8873 37.9108C22.8873 44.5423 28.4507 50 35.2113 50ZM35.2113 23.8263L47.8873 0.352113H22.5352L35.2113 23.8263ZM25.3521 26.1737L12.6761 49.6479L0 26.1737H25.3521Z" fill="currentColor">
+      </path>
+    </svg>      
+    <h1 class="h3 mb-3 fw-normal" style="font-size: 2.5em;"><b>DEVREV</b></h1>
+      <p>Please Enter Your Details</p>
+
+    <div class="form-floating">
+      <input type="email" class="form-control" id="floatingInput" name="username" placeholder="name@example.com" >
+      <label for="floatingInput">Email</label>
+    </div>
+  
+      <div class="form-floating">
+        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" >
+        <label for="floatingPassword">Password</label>
+      </div>
+            <div class="form-floating">
+        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" >
+        <label for="floatingPassword">Conform Password</label>
+      </div>
+      
+      <input type="text" id="number" name="phno" value="phno" placeholder="+91**********">
+      <h1 id="recaptcha-container"></h1>
+      <button type="button" onclick="phoneAuth();">SendCode</button>
+      <br><br>
+      <input  type="text" id="verificationCode" placeholder="Enter verification code"><br>
+      
+      <button type="button" onclick="codeverify();">Verify Code</button>
+      <br><br>
+
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> <b>Terms and Conditions</b>
+        </label>
+      </div>
+
+      <button class="w-100 btn btn-lg btn-primary" type="submit" id="submit" disabled>Sign Up</button><br><br>
+      <a href='index.php'>Already Have an Account?</a>
+    </form>
+        <p class="mt-5 mb-3 text-muted">Copy rights @Vinni</p>
+
+  </main>    
+  <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
+
+
+ <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAjmWeaJMH-fYbO1no7uXDBuzyofcW170s",
+      authDomain: "otpverfication-88c25.firebaseapp.com",
+      databaseURL: "https://otpverfication-88c25-default-rtdb.firebaseio.com",
+      projectId: "otpverfication-88c25",
+      storageBucket: "otpverfication-88c25.appspot.com",
+      messagingSenderId: "275292615562",
+      appId: "1:275292615562:web:09fdae649afdd779010e73"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script type="text/javascript">
+    window.onload=function () {
+      render();
+    };
+    function render() {
+      window.recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container');
+      recaptchaVerifier.render();
+    }
+    function phoneAuth() {
+      var number=document.getElementById('number').value;
+      firebase.auth().signInWithPhoneNumber(number,window.recaptchaVerifier).then(function (confirmationResult) {
+        window.confirmationResult=confirmationResult;
+        coderesult=confirmationResult;
+        console.log(coderesult);
+        alert("Message sent");
+      }).catch(function (error) {
+        alert(error.message);
+      });
+    }
+    function codeverify() {
+      var code=document.getElementById('verificationCode').value;
+      coderesult.confirm(code).then(function (result) {
+        alert("Successfully registered");
+        var disabled = document.getElementById("submit").disabled;
+        document.getElementById("submit").disabled = false;
+
+        var user=result.user;
+        console.log(user);
+      }).catch(function (error) {
+        alert(error.message);
+      });
+    }
+
+  </script>
+</body>
+</html>
